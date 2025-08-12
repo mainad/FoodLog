@@ -8,10 +8,8 @@ function formatDateKey(d = new Date()) {
 }
 
 function extractNutrients(food) {
-  // nutrientNumber codes (from USDA docs):
-  // Energy: 208, Protein: 203, Carbs: 205, Fat: 204, Fiber: 291, Sodium: 307, Calcium: 301, Iron: 303, Potassium: 306, Vit D: 328
   const nutrientsMap = {
-    208: 'energy',
+    208: 'calories',    // Energy (kcal)
     203: 'protein',
     205: 'carbs',
     204: 'fat',
@@ -23,18 +21,19 @@ function extractNutrients(food) {
     328: 'vitaminD',
   };
   const result = {
-    energy: 0, protein: 0, carbs: 0, fat: 0, fiber: 0,
+    calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0,
     sodium: 0, calcium: 0, iron: 0, potassium: 0, vitaminD: 0
   };
   (food.foodNutrients || []).forEach(n => {
     const key = nutrientsMap[n.nutrientNumber];
     if (key) {
-      const val = Number(n.value ?? 0);
+      const val = Number(n.value);
       if (!isNaN(val)) result[key] = val;
     }
   });
   return result;
 }
+
 
 function parseVoiceItems(transcript) {
   if (!transcript) return [];
@@ -96,17 +95,13 @@ export default function Home() {
   const base = extractNutrients(details);
 
   // Determine serving size in grams
-  let servingSizeGrams = details.servingSizeUnit && details.servingSizeUnit.toLowerCase().includes('g')
-    ? details.servingSize
-    : 100; // default fallback
+  const servingSizeGrams = details.servingSizeUnit?.toLowerCase().includes('g')
+  ? details.servingSize
+  : 100;
 
   // Calculate multiplier for scaling nutrients
-  let multiplier = 1;
-  if (unitLocal === 'g') {
-    multiplier = qtyLocal / servingSizeGrams;
-  } else {
-    multiplier = qtyLocal;
-  }
+  const multiplier = unitLocal === 'g' ? (qtyLocal / servingSizeGrams) : qtyLocal;
+
 
   // Scale nutrients
   const scaled = {};
@@ -357,7 +352,7 @@ const totals = (log[todayKey] || []).reduce((acc, it) => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm">{Math.round(it.nutrients.calories)} kcal</div>
+		  <div className="text-sm">{Number.isFinite(it.nutrients.calories) ? Math.round(it.nutrients.calories) : 0} kcal</div>
                   <button
                     onClick={() => removeItem(it.id)}
                     className="text-xs text-red-500 mt-1"
