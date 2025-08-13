@@ -1,40 +1,34 @@
-# QuickFood MVP
+# QuickFood (Fixed)
 
-This is a mobile-first Next.js app (Tailwind) to log foods quickly using USDA FoodData Central,
-with browser-only voice input that auto-splits a single spoken line into multiple food entries.
+Mobile-first Next.js app for ultra-fast food logging with USDA FoodData Central.
+- Browser-only speech input (Web Speech API)
+- Auto-split spoken entry by commas/“and”
+- Inline **editable goals** in the top panel
+- Correct calories/macros via robust USDA parsing
+- Delete entries
+- 14‑day history chart
+- Tailwind styling
 
-## Features
-- Browser SpeechRecognition (no cloud speech required)
-- Auto-split voice entries like: "one banana, two cups oat milk, thirty grams almonds"
-- USDA FoodData Central search & details proxied via Next.js API routes (keeps API key secret)
-- LocalStorage persistence (no account required)
-- Goal wizard (onboarding) to compute daily calorie/macro targets
-- Horizontal progress bars vs goals
-- Delete any entry
-- History chart (last 14 days)
-
-## Setup (locally)
-1. Install dependencies:
+## Local Setup
+1. Install deps
 ```bash
 npm install
 ```
-2. Add your FoodData Central API key:
-Create a `.env.local` file at the project root with:
+2. Add your USDA key
+Create `.env.local` in the project root:
 ```
-FDC_API_KEY=YOUR_KEY_HERE
+FDC_API_KEY=YOUR_USDA_FDC_API_KEY
 ```
-3. Run locally:
+3. Run
 ```
 npm run dev
 ```
 
 ## Deploy to Vercel
-1. Push this repo to GitHub.
-2. On Vercel, import the GitHub repo.
-3. In Project Settings → Environment Variables, add `FDC_API_KEY`.
-4. Deploy.
+1. Push to GitHub.
+2. On Vercel, import repo and add env var `FDC_API_KEY` (Production & Preview).
+3. Deploy.
 
-Notes:
-- Speech recognition works best on Chrome/Edge/Android browsers. iOS Safari currently does not support the Web Speech API.
-- This is an MVP — nutrient-scaling logic uses USDA food details heuristics; you can improve handling for branded products and labelNutrients.
-
+## Notes
+- Best in Chrome/Edge/Android; iOS Safari lacks Web Speech API.
+- Some branded items report nutrients via `labelNutrients`; we handle that fallback.

@@ -1,17 +1,17 @@
 {
-  "name": "quickfood-mvp",
-  "version": "0.1.0",
+  "name": "quickfood-fixed",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000"
+    "start": "next start -p 3000",
+    "lint": "echo 'no lint configured'"
   },
   "dependencies": {
     "next": "13.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "swr": "2.1.3",
     "recharts": "2.6.2"
   },
   "devDependencies": {
